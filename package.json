@@ -1,0 +1,25 @@
+{
+  "name": "blockchainprogramming-bip39-32",
+  "version": "1.0.0",
+  "description": "TD2 de mon cours de blockchain programming.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "go": "node script.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Pibastte/BlockChainProgramming-BIP39-32.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Pibastte/BlockChainProgramming-BIP39-32/issues"
+  },
+  "homepage": "https://github.com/Pibastte/BlockChainProgramming-BIP39-32#readme",
+  "dependencies": {
+    "buffer": "^6.0.3",
+    "prompt-sync": "^4.2.0",
+    "random-number-csprng": "^1.0.2"
+  }
+}
