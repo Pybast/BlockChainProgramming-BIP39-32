@@ -189,6 +189,16 @@ const master_public_key = secp256k1.publicKeyCreate(Buffer.from(master_private_k
 
 console.log("master public key:", Buffer.from(master_public_key).toString('hex'));
 
+// const derived_extended_prv_key = derive_prv_key("00", master_private_key, master_chain_code, "8000002c");
+// const derived_prv_key = derived_extended_prv_key.toString("hex").slice(0, 64);
+// const derived_chain_code = derived_extended_prv_key.toString('hex').slice(64);
+// const derived_pub_key = Buffer.from(secp256k1.publicKeyCreate(Buffer.from(derived_prv_key, 'hex'))).toString('hex');
+// console.log("\n45th hardened private key", derived_prv_key);
+// console.log("45th hardened public key", derived_pub_key);
+
+// console.log(derive_path(master_private_key, master_chain_code, "m/45'"));
+
+
 //Function to generate child private key, child public key and child chain code
 function generatingChild(parentPrivateKey, parentPublicKey, parentChainCode,index,type) {
     let parentPrivate = parentPrivateKey.length === 64 ? parentPrivateKey : '0'.repeat(64-parentPrivateKey.length)+parentPrivateKey;
@@ -212,42 +222,3 @@ function separateKeyChain(hmacHash) {
 
 var child = generatingChild(master_private_key, master_public_key, master_chain_code, (Math.pow(2, 31) + 44).toString(16), 'private');
 console.log("child:", child);
-
-function derive_path(prv_key, pub_key, chain_code, path){
-    
-    console.log("Please be sure that the path is correct:", path);
-
-    if (path[0] == "m"){
-        path = path.slice(2);
-    }
-    if (path[path.length-1] == "/"){
-        path = path.slice(0, path.length-1);
-    }
-
-    var index = path.split("/")[0];
-    var child_prv_key;
-    var child_pub_key;
-    var child_chain_code;
-
-    if (index[index.length - 1] == "'"){
-        //hardened
-        index = (Math.pow(2, 31) + parseInt(index.split("'")[0])).toString(16);
-        index = index.length === 8 ? index : '0'.repeat(8-index.length)+index;
-        [child_prv_key, child_pub_key, child_chain_code] = generatingChild(prv_key, pub_key, chain_code, index, 'private')
-        if (path.split("/").length > 1){
-            return derive_path(child_prv_key, child_pub_key, child_chain_code, path.split("/").slice(1).join("/"))
-        }
-    }
-    else {
-        //not hardened
-        index = (parseInt(index.split("'")[0])).toString(16);
-        index = index.length === 8 ? index : '0'.repeat(8-index.length)+index;
-        [child_prv_key, child_pub_key, child_chain_code] = generatingChild(prv_key, pub_key, chain_code, index, 'public')
-        if (path.split("/").length > 1){
-            return derive_path(child_prv_key, child_pub_key, child_chain_code, path.split("/").slice(1).join("/"))
-        }
-    }
-    return [child_prv_key, child_pub_key, child_chain_code];
-}
-
-console.log(derive_path(master_private_key, master_public_key, master_chain_code, "m/44'/0'/0'/0/1"))
