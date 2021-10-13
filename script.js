@@ -233,7 +233,7 @@ function derive_path(prv_key, pub_key, chain_code, path){
 
 // Check if path is correct
 function valid_path(path){
-    let regex = /^m+\/+([0-9]{1,10}[']?[\/])*[0-9]{1,10}$/;
+    let regex = /^m+\/+([0-9]{1,10}[']?[\/])*[0-9]{1,10}[']?$/;
     if (path.match(regex) === null){
         return false;
     }else{
